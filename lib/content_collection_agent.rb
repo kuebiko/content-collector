@@ -3,8 +3,11 @@ require 'mongo'
 
 class ContentCollectionAgent < Kuebiko::Agent
   RESOURCE_TOPICS = [
-    { topic: 'resources/twitter/tweet', klass: Kuebiko::MessagePayload::Document},
-    { topic: 'resources/persona',       klass: Kuebiko::MessagePayload::Persona }
+    { topic: 'resources/twitter/tweet', klass: Kuebiko::MessagePayload::Document}
+  ]
+
+  ENTITY_TOPICS = [
+    { topic: 'entities/persona', klass: Kuebiko::MessagePayload::Persona }
   ]
 
   RELATIONSHIP_CLASS = Kuebiko::MessagePayload::ResourceRelationship
@@ -15,12 +18,21 @@ class ContentCollectionAgent < Kuebiko::Agent
 
     @mongo_client = Mongo::MongoClient.new.db('kuebiko')
 
-    # Documents
+    # Resources
     RESOURCE_TOPICS.each do |config|
       dispatcher.register_message_handler(
         config[:topic],
         config[:klass],
         method(:handle_resource)
+      )
+    end
+
+    # Entities
+    ENTITY_TOPICS.each do |config|
+      dispatcher.register_message_handler(
+        config[:topic],
+        config[:klass],
+        method(:handle_entity)
       )
     end
 
@@ -33,16 +45,11 @@ class ContentCollectionAgent < Kuebiko::Agent
   end
 
   def handle_resource(msg)
-    hash = msg.payload.to_hash
-    hash.each do |key, value|
-      hash[key] = value.to_time.utc if value.is_a?(DateTime)
-    end
+    upsert_message(msg, 'resources')
+  end
 
-    @mongo_client.collection('resources').update(
-      { type: msg.payload.type, source: msg.payload.source, source_id: msg.payload.source_id },
-      hash,
-      upsert: true
-    )
+  def handle_entity(msg)
+    upsert_message(msg, 'entities')
   end
 
   def handle_relationship(msg)
@@ -75,5 +82,20 @@ class ContentCollectionAgent < Kuebiko::Agent
       { left_resource_id: left_id, right_resource_id: right_id, type: msg.payload.type }
     )
 
+  end
+
+  protected
+
+  def upsert_message(msg, collection)
+    hash = msg.payload.to_hash
+    hash.each do |key, value|
+      hash[key] = value.to_time.utc if value.is_a?(DateTime)
+    end
+
+    @mongo_client.collection(collection).update(
+      { type: msg.payload.type, source: msg.payload.source, source_id: msg.payload.source_id },
+      hash,
+      upsert: true
+    )
   end
 end
