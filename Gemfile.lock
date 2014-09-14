@@ -1,13 +1,13 @@
 GIT
   remote: git@gitlab.com:kuebiko/ruby-kuebiko.git
-  revision: e5e39630dc71784dfa126c72ff6c46a2eca647f7
+  revision: 64cde2bcf7ce7602fadea7c6c84d509893330347
   branch: master
   specs:
     kuebiko (0.0.1)
       celluloid
-      hashie (~> 2.1)
+      hashie (>= 2.1)
       mosquitto
-      virtus (~> 1.0.2)
+      virtus (>= 1.0.2)
 
 GEM
   remote: https://rubygems.org/
@@ -19,11 +19,12 @@ GEM
     bson (1.10.2)
     bson_ext (1.10.2)
       bson (~> 1.10.2)
-    byebug (3.1.2)
+    byebug (3.4.0)
       columnize (~> 0.8)
       debugger-linecache (~> 1.2)
-    celluloid (0.15.2)
-      timers (~> 1.1.0)
+      slop (~> 3.6)
+    celluloid (0.16.0)
+      timers (~> 4.0.0)
     coercible (1.0.0)
       descendants_tracker (~> 0.0.1)
     columnize (0.8.9)
@@ -31,18 +32,21 @@ GEM
     descendants_tracker (0.0.4)
       thread_safe (~> 0.3, >= 0.3.1)
     equalizer (0.0.9)
-    hashie (2.1.2)
+    hashie (3.3.1)
+    hitimes (1.2.2)
     ice_nine (0.11.0)
     mongo (1.10.2)
       bson (= 1.10.2)
     mosquitto (0.3)
+    slop (3.6.0)
     thread_safe (0.3.4)
-    timers (1.1.0)
-    virtus (1.0.2)
+    timers (4.0.1)
+      hitimes
+    virtus (1.0.3)
       axiom-types (~> 0.1)
       coercible (~> 1.0)
-      descendants_tracker (~> 0.0.3)
-      equalizer (~> 0.0.9)
+      descendants_tracker (~> 0.0, >= 0.0.3)
+      equalizer (~> 0.0, >= 0.0.9)
 
 PLATFORMS
   ruby
