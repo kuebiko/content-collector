@@ -1,6 +1,3 @@
-require 'byebug'
-require 'mongo'
-
 class ContentCollectionAgent < Kuebiko::Agent
   RESOURCE_TOPICS = [
     { topic: 'resources/twitter/tweet', klass: Kuebiko::MessagePayload::Document}

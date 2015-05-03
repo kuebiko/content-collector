@@ -1,0 +1,8 @@
+database:
+  adapter: postgresql
+  encoding: unicode
+  host: localhost
+  pool: 5
+  database: kuebiko_content_collector
+  username: kuebiko
+  password:
