@@ -1,6 +1,7 @@
 class ContentCollectionAgent < Kuebiko::Agent
   RESOURCE_TOPICS = [
-    { topic: 'resources/twitter/tweet', klass: Kuebiko::MessagePayload::Document}
+    { topic: 'resources/twitter/tweet', klass: Kuebiko::MessagePayload::Document },
+    { topic: 'resources/instagram/media', klass: Kuebiko::MessagePayload::Document }
   ]
 
   ENTITY_TOPICS = [
@@ -12,10 +13,8 @@ class ContentCollectionAgent < Kuebiko::Agent
 
   def initialize
     super
-
-    @mongo_client = Mongo::MongoClient.new.db('kuebiko')
-
-    # Resources
+    
+    # # Resources
     RESOURCE_TOPICS.each do |config|
       dispatcher.register_message_handler(
         config[:topic],
@@ -34,19 +33,26 @@ class ContentCollectionAgent < Kuebiko::Agent
     end
 
     # Relationship
-    dispatcher.register_message_handler(
-      RELATIONSHIP_TOPIC,
-      RELATIONSHIP_CLASS,
-      method(:handle_relationship)
-    )
+    # dispatcher.register_message_handler(
+    #   RELATIONSHIP_TOPIC,
+    #   RELATIONSHIP_CLASS,
+    #   method(:handle_relationship)
+    # )
   end
 
   def handle_resource(msg)
-    upsert_message(msg, 'resources')
+    find_attrs = { source: msg.payload.source, source_id: msg.payload.source_id }
+    content = msg.payload.to_hash.slice(*Resource.attribute_names.map(&:to_sym))
+
+    Resource.where(find_attrs).first_or_create!(content)
   end
 
   def handle_entity(msg)
-    upsert_message(msg, 'entities')
+    find_attrs = { source: msg.payload.source, source_id: msg.payload.source_id }
+
+    content = msg.payload.to_hash.slice(*Persona.attribute_names.map(&:to_sym))
+
+    Persona.where(find_attrs).first_or_create!(content)
   end
 
   def handle_relationship(msg)

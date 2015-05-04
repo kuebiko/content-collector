@@ -6,3 +6,4 @@ gem 'byebug'
 
 gem 'activerecord'
 gem 'rake'
+gem 'awesome_print'

@@ -1,6 +1,6 @@
 GIT
   remote: git@gitlab.com:kuebiko/ruby-kuebiko.git
-  revision: d1262e782d758fee51b9453b6090956d6dc42fd1
+  revision: eda3dfa065c3d8036dac76c98ea9ba8870736a7d
   branch: master
   specs:
     kuebiko (0.0.2)
@@ -26,6 +26,7 @@ GEM
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
     arel (6.0.0)
+    awesome_print (1.6.1)
     axiom-types (0.1.1)
       descendants_tracker (~> 0.0.4)
       ice_nine (~> 0.11.0)
@@ -66,6 +67,7 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord
+  awesome_print
   byebug
   kuebiko!
   pg
